@@ -1,0 +1,35 @@
+# --- Build Directories ---
+build/
+bin/
+lib/
+cmake-build-*/
+
+# --- CMake Artifacts ---
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# --- Compiled Object Files & Libraries ---
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# --- Executables ---
+# Change 'Main' to your specific executable name if known,
+# or exclude all files with no extension (risky if you have scripts)
+*.exe
+*.out
+*.app
+
+# --- IDE Settings (Optional but recommended) ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
