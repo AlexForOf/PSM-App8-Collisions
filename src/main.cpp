@@ -3,7 +3,6 @@
 #include <vector>
 #include <optional>
 
-// Ensure this header exists and is correct
 #include "particles/particle.h"
 
 enum ScenarioMode
