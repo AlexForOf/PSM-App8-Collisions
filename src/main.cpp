@@ -5,12 +5,6 @@
 
 #include "particles/particle.h"
 
-enum ScenarioMode
-{
-    SIMILAR_MASSES,
-    DIFFERENT_MASSES
-};
-
 enum class AppState
 {
     PlacingBall1,
@@ -28,20 +22,18 @@ struct TempValues
     sf::Vector2f tempPosition = {0.0f, 0.0f};
 };
 
-void drawVelocityVector(sf::RenderWindow& window, const sf::Vector2f& start, const sf::Vector2f& velocity)
+void drawVelocityVector(sf::RenderWindow &window, const sf::Vector2f &start, const sf::Vector2f &velocity)
 {
     sf::Vector2f end = start + velocity;
     sf::Vertex line[] = {
         {start, sf::Color::Yellow},
-        {end, sf::Color::Yellow}
-    };
+        {end, sf::Color::Yellow}};
     window.draw(line, 2, sf::PrimitiveType::Lines);
 }
 
 void defineActionState(
-  const sf::Event& event, AppState& currentState, TempValues& tempValues,
-  std::vector<Particle>& particles, sf::Vector2f mousePos
-)
+    const sf::Event &event, AppState &currentState, TempValues &tempValues,
+    std::vector<Particle> &particles, sf::Vector2f mousePos)
 {
     if (currentState != AppState::Running)
     {
@@ -63,7 +55,7 @@ void defineActionState(
 
         if (currentState == AppState::ConfiguringBall1 || currentState == AppState::ConfiguringBall2)
         {
-            if (const auto* keyEvent = event.getIf<sf::Event::KeyPressed>())
+            if (const auto *keyEvent = event.getIf<sf::Event::KeyPressed>())
             {
                 float velocityStep = 10.0f;
 
@@ -71,7 +63,7 @@ void defineActionState(
                     tempValues.tempVelocity.y -= velocityStep;
                 if (keyEvent->code == sf::Keyboard::Key::Down)
                     tempValues.tempVelocity.y += velocityStep;
-                
+
                 if (keyEvent->code == sf::Keyboard::Key::Left)
                     tempValues.tempVelocity.x -= velocityStep;
                 if (keyEvent->code == sf::Keyboard::Key::Right)
@@ -98,8 +90,8 @@ void defineActionState(
                         particles.emplace_back(
                             tempValues.tempMass, tempValues.tempRadius, tempValues.tempPosition,
                             tempValues.tempVelocity, sf::Color::Cyan);
-                        
-                        tempValues.tempVelocity = {-100.0f, 0.0f}; 
+
+                        tempValues.tempVelocity = {-100.0f, 0.0f};
                         currentState = AppState::PlacingBall2;
                     }
                     else if (currentState == AppState::ConfiguringBall2)
@@ -107,7 +99,7 @@ void defineActionState(
                         particles.emplace_back(
                             tempValues.tempMass, tempValues.tempRadius, tempValues.tempPosition,
                             tempValues.tempVelocity, sf::Color::Magenta);
-                        
+
                         currentState = AppState::Running;
                         std::cout << "Simulation Started!\n";
                     }
@@ -117,7 +109,7 @@ void defineActionState(
     }
     else
     {
-        if (const auto* keyEvent = event.getIf<sf::Event::KeyPressed>())
+        if (const auto *keyEvent = event.getIf<sf::Event::KeyPressed>())
         {
             if (keyEvent->code == sf::Keyboard::Key::R)
             {
@@ -165,16 +157,20 @@ int main()
         if (currentState == AppState::Running)
         {
             float dt = clock.restart().asSeconds();
-            if (dt > 0.1f) dt = 0.1f;
+            if (dt > 0.1f)
+                dt = 0.1f;
 
-            for (auto& p : particles)
+            for (auto &p : particles)
             {
                 p.update(dt);
             }
 
-            if (particles.size() >= 2) {
-                for (size_t i = 0; i < particles.size(); ++i) {
-                    for (size_t j = i + 1; j < particles.size(); ++j) {
+            if (particles.size() >= 2)
+            {
+                for (size_t i = 0; i < particles.size(); ++i)
+                {
+                    for (size_t j = i + 1; j < particles.size(); ++j)
+                    {
                         Particle::resolveCollision(particles[i], particles[j]);
                     }
                 }
@@ -187,7 +183,7 @@ int main()
 
         window.clear();
 
-        for (const auto& p : particles)
+        for (const auto &p : particles)
         {
             window.draw(p);
         }
